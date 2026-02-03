@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap');
+@import './mobile.scss';
+
+:root {
+    --primary: #00f0ff;
+    --secondary: #00a8ff;
+    --accent: #ffb700;
+    // Darker, more transparent background for better contrast with blur
+    --bg-dark: rgba(2, 8, 14, 0.70);
+    --grid-color: rgba(0, 240, 255, 0.1);
+    --border-glow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+.jarvis-window {
+    position: absolute;
+    background: var(--bg-dark);
+    // High-quality Blur for that "Thick Glass" look
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 4px; // Slight rounding like modern aerospace glass
+    overflow: visible;
+
+    // Depth shadows
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5), // Deep shadow
+        0 0 0 1px rgba(0, 240, 255, 0.1), // Inner rim
+        inset 0 0 80px rgba(0, 240, 255, 0.05); // Inner glow
+
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); // Exponential easing
+    display: flex;
+    flex-direction: column;
+
+    &.focused {
+        border-color: rgba(0, 240, 255, 0.8);
+        box-shadow:
+            0 15px 50px rgba(0, 0, 0, 0.6),
+            0 0 20px rgba(0, 240, 255, 0.2), // Outer Glow
+            inset 0 0 20px rgba(0, 240, 255, 0.1); // Inner Highlight
+        z-index: 1000;
+
+        // Header glow when focused
+        .window-header {
+            background: linear-gradient(90deg,
+                    rgba(0, 240, 255, 0.1) 0%,
+                    rgba(0, 240, 255, 0.25) 50%,
+                    rgba(0, 240, 255, 0.1) 100%);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.5);
+        }
+    }
+
+    &.minimized {
+        opacity: 0;
+        transform: scale(0.9) translateY(40px) perspective(1000px) rotateX(10deg);
+        pointer-events: none;
+        backdrop-filter: blur(0px); // Performance
+    }
+
+    // --- TOP HEADER ---
+    .window-header {
+        height: 40px;
+        background: linear-gradient(90deg,
+                rgba(0, 240, 255, 0.02) 0%,
+                rgba(0, 240, 255, 0.1) 50%,
+                rgba(0, 240, 255, 0.02) 100%);
+        border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
+        cursor: grab;
+        user-select: none;
+        position: relative;
+        transition: background 0.3s;
+
+        // Animated line under header
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 8px var(--primary);
+            opacity: 0.7;
+        }
+
+        &:active {
+            cursor: grabbing;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .window-id-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 240, 255, 0.15);
+            padding: 3px 6px;
+            border-left: 2px solid var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .window-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+
+            .title-decoration {
+                color: var(--primary);
+            }
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+
+            .control-btn {
+                width: 26px;
+                height: 26px;
+                border: 1px solid rgba(0, 240, 255, 0.3);
+                background: rgba(0, 20, 30, 0.3);
+                color: var(--primary);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Orbitron';
+                font-size: 10px;
+                transition: all 0.2s;
+
+                &:hover {
+                    background: var(--primary);
+                    color: #000;
+                    box-shadow: 0 0 10px var(--primary);
+                    transform: scale(1.1);
+                }
+
+                &.close:hover {
+                    background: #ff3b3b;
+                    border-color: #ff3b3b;
+                    box-shadow: 0 0 10px #ff3b3b;
+                }
+            }
+        }
+    }
+
+    // --- SUB-HEADER ---
+    .window-subheader {
+        height: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 12px;
+        background: rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-family: 'Share Tech Mono';
+        font-size: 11px;
+        color: var(--secondary);
+        letter-spacing: 0.05em;
+
+        .subheader-left {
+            color: var(--accent);
+
+            &::before {
+                content: '>> SYSTEM: ';
+                opacity: 0.6;
+            }
+        }
+
+        .subheader-right {
+            opacity: 0.6;
+        }
+    }
+
+    // --- CONTENT AREA ---
+    .window-content {
+        padding: 24px;
+        color: rgba(230, 245, 255, 0.95); // Slightly bluish white text
+        font-family: 'Share Tech Mono', monospace;
+        overflow-y: auto;
+        flex: 1;
+
+        // Holographic Grid Background
+        background-image:
+            linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+        background-size: 30px 30px;
+        background-position: center top;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(0, 240, 255, 0.4);
+
+            &:hover {
+                background: var(--primary);
+            }
+        }
+    }
+
+    // --- DECORATIVE BORDERS ("Tech Brackets") ---
+    .window-decorations {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 101;
+
+        // Corners
+        &::before {
+            // Top Left
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 15px;
+            height: 15px;
+            border-top: 2px solid var(--primary);
+            border-left: 2px solid var(--primary);
+            box-shadow: -2px -2px 5px var(--primary);
+        }
+
+        &::after {
+            // Top Right
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 15px;
+            height: 15px;
+            border-top: 2px solid var(--primary);
+            border-right: 2px solid var(--primary);
+            box-shadow: 2px -2px 5px var(--primary);
+        }
+
+        .bottom-decor {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+
+            &::before {
+                // Bottom Left
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: -1px;
+                width: 15px;
+                height: 15px;
+                border-bottom: 2px solid var(--primary);
+                border-left: 2px solid var(--primary);
+                box-shadow: -2px 2px 5px var(--primary);
+            }
+
+            &::after {
+                // Bottom Right
+                content: '';
+                position: absolute;
+                bottom: 0;
+                right: -1px;
+                width: 15px;
+                height: 15px;
+                border-bottom: 2px solid var(--primary);
+                border-right: 2px solid var(--primary);
+                box-shadow: 2px 2px 5px var(--primary);
+            }
+        }
+    }
+
+    // --- SCANLINE OVERLAY ---
+    .scanline-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 50%, rgba(0, 20, 30, 0.1) 51%);
+        background-size: 100% 3px;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.3;
+        mix-blend-mode: overlay;
+    }
+}
+
+// Global pulse animation for text/elements
+@keyframes technical-pulse {
+    0% {
+        opacity: 0.8;
+        text-shadow: 0 0 5px var(--primary);
+    }
+
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 15px var(--primary), 0 0 5px white;
+    }
+
+    100% {
+        opacity: 0.8;
+        text-shadow: 0 0 5px var(--primary);
+    }
+}
+
+// Typing cursor
+.cursor-blink {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}

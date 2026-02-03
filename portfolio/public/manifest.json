@@ -1,0 +1,29 @@
+{
+    "name": "J.A.R.V.I.S. Portfolio",
+    "short_name": "JARVIS",
+    "description": "Interactive holographic portfolio powered by J.A.R.V.I.S. AI",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#00F0FF",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "/jarvis-icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/jarvis-icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "portfolio",
+        "technology",
+        "entertainment"
+    ]
+}
