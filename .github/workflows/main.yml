@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ] # Runs every time you push to main
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -21,17 +21,23 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+          # This line tells GitHub where to find your lock file for caching
+          cache-dependency-path: './portfolio/package-lock.json' 
 
       - name: Install dependencies
+        # This tells GitHub to run the command inside the portfolio folder
+        working-directory: ./portfolio 
         run: npm install
 
       - name: Build
+        working-directory: ./portfolio
         run: npm run build
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist/' # Vite builds into the dist folder
+          # This ensures it uploads the built files from the correct folder
+          path: './portfolio/dist/' 
 
   deploy:
     needs: build_site
