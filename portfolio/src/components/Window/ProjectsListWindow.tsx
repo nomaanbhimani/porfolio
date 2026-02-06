@@ -22,7 +22,7 @@ const PROJECTS = [
         description: 'AI image detector using multi-layer forensic analysis - spectral analysis (Gram Matrix, DCT) and \"Council of Experts\" ensemble voting system.',
         tech: ['Python', 'ReportLab', 'ML'],
         status: 'DEPLOYED',
-        url: 'https://ai-img-detector.onrender.com'
+        url: 'https://nomanbhimani-sentinel.hf.space'
     },
     {
         id: 'p3',
@@ -170,3 +170,4 @@ export function ProjectsListWindow({ window }: ProjectsListWindowProps) {
         </BaseWindow>
     )
 }
+
